@@ -1,7 +1,7 @@
 from chat import app, controller
 from chat.ChatSocketHandler import ChatBackend
 import os
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, render_template
 
 import redis
 
@@ -11,6 +11,12 @@ import redis
 
 # chats = ChatBackend(redis_server=redis_server, channel=REDIS_CHAN)
 # chats.start()
+
+
+@app.route('/')
+@app.route('/<name>')
+def index_page(name='Default'):
+    return render_template('index.html', name=name)
 
 
 @app.route('/add_user', methods=['POST'])
