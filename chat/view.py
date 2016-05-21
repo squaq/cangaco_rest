@@ -14,9 +14,8 @@ import redis
 
 
 @app.route('/')
-@app.route('/<name>')
-def index_page(name='Default'):
-    return render_template('index.html', name=name)
+def index_page():
+    return render_template('index.html')
 
 
 @app.route('/add_user', methods=['POST'])
