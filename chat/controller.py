@@ -15,6 +15,7 @@ def get_all_users():
 
     return [l.get_dict() for l in list]
 
+
 def get_user_info(user_id):
     return database.get_user(user_id=user_id)
 
