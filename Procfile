@@ -1,1 +1,1 @@
-web: gunicorn runserver:app --chdir gemt --log-file -
+web: gunicorn runserver:app --chdir chat --log-file -
