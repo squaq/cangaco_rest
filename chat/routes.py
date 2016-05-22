@@ -1,34 +1,48 @@
 from chat import app, controller
-from chat.ChatSocketHandler import ChatBackend
-import os
-from flask import jsonify, request, abort, render_template
-
-import redis
-
-# REDIS_URL = os.environ['REDIS_URL']
-# REDIS_CHAN = 'chat'
-# redis_server = redis.from_url(REDIS_URL)
-
-# chats = ChatBackend(redis_server=redis_server, channel=REDIS_CHAN)
-# chats.start()
+from flask import jsonify, request, abort, render_template, session, redirect, url_for
+from forms import LoginForm
 
 
-@app.route('/')
-def index_page():
-    return render_template('index.html')
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    """"Login form to enter a room."""
+    form = LoginForm()
+    if form.validate_on_submit():
+        session['name'] = form.name.data
+        session['room'] = form.room.data
+        return redirect(url_for('.chat'))
+    elif request.method == 'GET':
+        form.name.data = session.get('name', '')
+        form.room.data = session.get('room', '')
+    return render_template('index.html', form=form)
+
+
+@app.route('/chat')
+def chat():
+    """Chat room. The user's name and room must be stored in
+    the session."""
+    name = session.get('name', '')
+    room = session.get('room', '')
+    if name == '' or room == '':
+        return redirect(url_for('.index'))
+    return render_template('chat.html', name=name, room=room)
+
+
+# @app.route('/')
+# def index_page():
+#     return render_template('index.html')
 
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
     if not request.json:
         abort(400)
-    if any (x not in request.json for x in {'user_id', 'email', 'name'}):
+    if any(x not in request.json for x in {'user_id', 'email', 'name'}):
         abort(404, 'Missing parameters.')
     req_json = request.json
     app.logger.info(u'Adding new user: {}'.format(req_json))
     res = controller.register_new_user(req_json['user_id'], req_json['email'], req_json['name'])
     return jsonify({'new_user': res})
-
 
 
 @app.route('/fetch_channels', methods=['get'])

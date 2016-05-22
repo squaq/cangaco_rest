@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chat Server Main Page</title>
-</head>
-<body>
-<div>
-    <h1>Welcome to CHAT server.</h1>
-</div>
-</body>
+<html>
+    <head>
+        <title>Flask-SocketIO-Chat</title>
+    </head>
+    <body>
+        <h1>Flask-SocketIO-Chat</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.name.label }}: {{ form.name() }} {% for error in form.name.errors %}{{ error }}{% endfor %}<br>
+            {{ form.room.label }}: {{ form.room() }} {% for error in form.room.errors %}{{ error }}{% endfor %}<br>
+            {{ form.submit() }}
+        </form>
+    </body>
 </html>

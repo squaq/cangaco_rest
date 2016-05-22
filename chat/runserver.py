@@ -1,5 +1,4 @@
-from chat import app
+from chat import app, socketio
 
 if __name__ == '__main__':
-    print 'Starting local'
-    app.run(debug=True)
+    socketio.run(app)
