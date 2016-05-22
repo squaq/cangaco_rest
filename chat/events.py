@@ -22,6 +22,7 @@ def joined(message):
 def send_message(message):
     """Sent by a client when the user entered a new message.
     The message is sent to all people in the room."""
+    print 'Received a message', message
     room = message.get('room')
     user = message.get('user')
     emit('new message', {'username': user, 'msg': message['msg']}, room=room)
