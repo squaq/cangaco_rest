@@ -1,1 +1,1 @@
-web: gunicorn runserver:app --chdir chat --log-file -
+web: gunicorn --worker-class socketio.sgunicorn.GeventSocketIOWorker --log-file=- runserver:app --chdir chat
